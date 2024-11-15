@@ -16,11 +16,11 @@ export default function HomePage(props) {
     console.log("Start recording");
 
     try {
-      const StreamData = await navigator.mediaDevices.getUserMedia({
+      const streamData = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: false
       });
-      tempStream = StreamData;
+      tempStream = streamData;
     } catch (err) {
       console.log(err.message);
       return;
@@ -71,28 +71,30 @@ export default function HomePage(props) {
   });
 
   return (
-    <main className="flex-1 p-4 flex flex-col gap-3 text-center sm:gap-4 md:gap-5 justify-center pb-20">
+    <main className="flex-1  p-4 flex flex-col gap-3 text-center sm:gap-4  justify-center pb-20">
       <h1 className="font-semibold text-5xl sm:text-6xl md:text-7xl">
-        Scribe<span className="text-blue-400 bold">Ness</span>
+        Free<span className="text-blue-400 bold">Scribe</span>
       </h1>
       <h3 className="font-medium md:text-lg">
-        Record <span className="text-blue-400">&rarr;</span>
-        Transcribe <span className="text-blue-400">&rarr;</span> Translate
+        Record <span className="text-blue-400">&rarr;</span> Transcribe{" "}
+        <span className="text-blue-400">&rarr;</span> Translate
       </h3>
       <button
         onClick={
           recordingStatus === "recording" ? stopRecording : startRecording
         }
-        className="specialBtn px-4 py-2 rounded-xl flex items-center text-base justify-between gap-4 mx-auto w-72 max-w-full my-4"
+        className="flex specialBtn px-4 py-2 rounded-xl items-center text-base justify-between gap-4 mx-auto w-72 max-w-full my-4"
       >
         <p className="text-blue-400">
           {recordingStatus === "inactive" ? "Record" : `Stop recording`}
         </p>
         <div className="flex items-center gap-2">
-          {duration !== 0 && <p className="text-sm">{duration}s</p>}
+          {/* {duration !== 0 && (
+                        <p className='text-sm'>{duration}s</p>
+                    )} */}
           <i
             className={
-              "fa-solid duration-200 fa-microphone-lines" +
+              "fa-solid duration-200 fa-microphone " +
               (recordingStatus === "recording" ? " text-rose-300" : "")
             }
           ></i>
@@ -112,9 +114,9 @@ export default function HomePage(props) {
             accept=".mp3,.wave"
           />
         </label>{" "}
-        an mp3 file
+        a mp3 file
       </p>
-      <p className="italic text-slate-400">~ Free Forever ~</p>
+      <p className="italic text-slate-400">Free now free forever</p>
     </main>
   );
 }
