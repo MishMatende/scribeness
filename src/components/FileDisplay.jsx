@@ -19,7 +19,10 @@ export default function FileDisplay(props) {
         >
           Reset
         </button>
-        <button className="specialBtn px-3 p-2 rounded-lg text-blue-400 flex items-center gap-2 font-medium">
+        <button
+          onClick={handleFormSubmission}
+          className="specialBtn px-3 p-2 rounded-lg text-blue-400 flex items-center gap-2 font-medium"
+        >
           <p>Transcribe</p>
           <i className="fa-solid fa-pen-nib"></i>
         </button>

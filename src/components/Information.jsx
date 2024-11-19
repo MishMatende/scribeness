@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Transcription from "./Transcription";
 import Translation from "./Translation";
 
-export default function Information() {
+export default function Information(props) {
+  const { output } = props;
   const [tab, setTab] = useState("transcription");
 
   return (
@@ -14,9 +15,9 @@ export default function Information() {
         <button
           onClick={() => setTab("transcription")}
           className={
-            "px-4 duration-200 py-1 font-medium " +
+            "px-4 duration-200 py-1 " +
             (tab === "transcription"
-              ? " bg-blue-400 text-white"
+              ? " bg-blue-300 text-white"
               : " text-blue-400 hover:text-blue-600")
           }
         >
@@ -25,16 +26,20 @@ export default function Information() {
         <button
           onClick={() => setTab("translation")}
           className={
-            "px-4 duration-200 py-1 font-medium " +
+            "px-4 duration-200 py-1 " +
             (tab === "translation"
-              ? " bg-blue-400 text-white"
+              ? " bg-blue-300 text-white"
               : " text-blue-400 hover:text-blue-600")
           }
         >
           Translation
         </button>
       </div>
-      {tab === "transcription" ? <Transcription /> : <Translation />}
+      {tab === "transcription" ? (
+        <Transcription {...props} />
+      ) : (
+        <Translation {...props} />
+      )}
     </main>
   );
 }
