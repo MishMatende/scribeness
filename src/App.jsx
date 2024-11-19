@@ -1,6 +1,6 @@
+import { useState, useRef, useEffect } from "react";
 import HomePage from "./components/HomePage";
 import Header from "./components/Header";
-import { useState, useRef, useEffect } from "react";
 import FileDisplay from "./components/FileDisplay";
 import Information from "./components/Information";
 import Transcribing from "./components/Transcribing";
@@ -14,7 +14,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
 
-  const isAudioAVailable = file || audioStream;
+  const isAudioAvailable = file || audioStream;
 
   function handleAudioReset() {
     setFile(null);
@@ -27,7 +27,9 @@ function App() {
     if (!worker.current) {
       worker.current = new Worker(
         new URL("./utils/whisper.worker.js", import.meta.url),
-        { type: "module" }
+        {
+          type: "module"
+        }
       );
     }
 
@@ -43,6 +45,7 @@ function App() {
           break;
         case "RESULT":
           setOutput(e.data.results);
+          console.log(e.data.results);
           break;
         case "INFERENCE_DONE":
           setFinished(true);
@@ -61,18 +64,18 @@ function App() {
     const sampling_rate = 16000;
     const audioCTX = new AudioContext({ sampleRate: sampling_rate });
     const response = await file.arrayBuffer();
-    const decoded = await audioCTX.decodedAudioData(response);
+    const decoded = await audioCTX.decodeAudioData(response);
     const audio = decoded.getChannelData(0);
     return audio;
   }
 
-  async function handleFormSubmition() {
+  async function handleFormSubmission() {
     if (!file && !audioStream) {
       return;
     }
 
     let audio = await readAudioFrom(file ? file : audioStream);
-    const model_name = "openai/whisper-tiny.en";
+    const model_name = `openai/whisper-tiny.en`;
 
     worker.current.postMessage({
       type: MessageTypes.INFERENCE_REQUEST,
@@ -89,8 +92,9 @@ function App() {
           <Information />
         ) : loading ? (
           <Transcribing />
-        ) : isAudioAVailable ? (
+        ) : isAudioAvailable ? (
           <FileDisplay
+            handleFormSubmission={handleFormSubmission}
             handleAudioReset={handleAudioReset}
             file={file}
             audioStream={audioStream}
