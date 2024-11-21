@@ -40,6 +40,14 @@ export default function Information(props) {
       ) : (
         <Translation {...props} />
       )}
+      <div className="flex items-center gap-4">
+        <button className="specialBtn">
+          <i className="fa-solid fa-copy"></i>
+        </button>
+        <button className="specialBtn">
+          <i className="fa-solid fa-download"></i>
+        </button>
+      </div>
     </main>
   );
 }
