@@ -5,6 +5,40 @@ import Translation from "./Translation";
 export default function Information(props) {
   const { output } = props;
   const [tab, setTab] = useState("transcription");
+  const [translation, setTranslation] = useState(null);
+  const [translating, setTranslating] = useState(null);
+  const [toLanguage, setToLanguage] = useState("select Language");
+  console.log(output);
+
+  function handleCopy() {
+    navigator.clipboard.writeText();
+  }
+
+  function handleDownload() {
+    const element = document.createElement("a");
+    const file = new Blob([], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download(`ScribeNess_${new Date().toDateString()}.txt`);
+    document.body.appendChild(element);
+    element.click();
+  }
+
+  function generateTranslation() {
+    if (translating || toLanguage === "Select Language") {
+      return;
+    }
+
+    setTranslating(true);
+
+    Worker.current.postMessage({
+      text: output.map((val) => val.text),
+      src_language: "eng_Latn",
+      tgt_lang: toLanguage
+    });
+  }
+
+  const textElement =
+    tab === "transcription" ? output.map((val) => val.text) : "";
 
   return (
     <main className="flex-1 p-4 flex flex-col gap-3 text-center sm:gap-4 justify-center pb-20 max-w-prose w-full mx-auto">
@@ -35,16 +69,33 @@ export default function Information(props) {
           Translation
         </button>
       </div>
-      {tab === "transcription" ? (
-        <Transcription {...props} />
-      ) : (
-        <Translation {...props} />
-      )}
-      <div className="flex items-center gap-4">
-        <button className="specialBtn">
+      <div className="my-8 flex flex-col">
+        {tab === "transcription" ? (
+          <Transcription {...props} textElement={textElement} />
+        ) : (
+          <Translation
+            {...props}
+            toLanguage={toLanguage}
+            translating={translating}
+            textElement={textElement}
+            setTranslation={setTranslation}
+            setTranslating={setTranslating}
+            setToLanguage={setToLanguage}
+            generateTranslation={generateTranslation}
+          />
+        )}
+      </div>
+      <div className="flex items-center gap-4 mx-auto">
+        <button
+          title="Copy"
+          className="bg-white hover:text-blue-500 duration-200 text-blue-300 px-2 aspect-square grid place-items-center rounded"
+        >
           <i className="fa-solid fa-copy"></i>
         </button>
-        <button className="specialBtn">
+        <button
+          title="Download"
+          className="bg-white hover:text-blue-500 duration-200 text-blue-300 px-2 aspect-square grid place-items-center rounded"
+        >
           <i className="fa-solid fa-download"></i>
         </button>
       </div>
